@@ -7,6 +7,8 @@
     "@testing-library/react": "^13.1.1",
     "@testing-library/user-event": "^13.5.0",
     "@types/react": "^17.0.45",
+    "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/react-color": "^3.0.6",
     "@types/styled-components": "^5.1.25",
     "node-sass": "^4.14.1",
     "react": "^17.0.1",
@@ -50,7 +52,12 @@
     "node": ">= 14"
   },
   "dependencies": {
+    "@jeongyk92/react-customform": "^1.0.13",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-color": "^2.19.3",
     "styled-components": "^5.3.5",
+    "sweetalert2": "^10.16.9",
+    "sweetalert2-react-content": "^3.2.2",
     "typescript": "^4.7.2"
   }
 }
