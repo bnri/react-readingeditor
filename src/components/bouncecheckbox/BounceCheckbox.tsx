@@ -24,6 +24,7 @@ const StyledCheckBoxWrap = styled.label`
   --border-hover: #bbc1e1;
   --border-active: rgb(115, 103, 240);
   --tick: #fff;
+  --stroke: var(--tick);
   position: relative;
   input,
   svg {
@@ -50,6 +51,10 @@ const StyledCheckBoxWrap = styled.label`
     }
     &:checked {
       --b: var(--border-active);
+      --s: 11px;
+      & + svg {
+        animation: bounce 0.4s linear forwards 0.2s;
+      }
     }
   }
   svg {
@@ -65,21 +70,7 @@ const StyledCheckBoxWrap = styled.label`
     width: 21px;
     height: 21px;
     transform: scale(var(--scale, 1)) translateZ(0);
-  }
-
-  &.bounce {
-    --stroke: var(--tick);
-    input {
-      &:checked {
-        --s: 11px;
-        & + svg {
-          animation: bounce 0.4s linear forwards 0.2s;
-        }
-      }
-    }
-    svg {
-      --scale: 0;
-    }
+    --scale: 0;
   }
 
   @keyframes bounce {

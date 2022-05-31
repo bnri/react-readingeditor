@@ -23,11 +23,12 @@ import {
   tasksType,
 } from "./types";
 import { StyledBtn, StyledBtnOrange, StyledBtnRed } from "./styles/Buttons";
+import FontSVG from "./assets/svg/FontSVG";
 
 interface ContentEditorProps extends CommonComponents {
   data?: saveContentDataType;
   setLoading: Dispatch<React.SetStateAction<boolean>>;
-  onClose: (isRefresh?: boolean) => void;
+  onClose: (goRefresh?: boolean) => void;
   onSave: ContentSaveHandler;
   onDelete: ContentDeleteHandler;
 }
@@ -475,7 +476,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
 
           <StyledToolbarIcon ref={textcolorRef}>
             <StyledTextColor onClick={() => setShowTextcolor((state) => !state)}>
-              <i className="fa fa-font" aria-hidden="true"></i>
+              <FontSVG />
               <StyledColorBox style={{ background: textcolor }}></StyledColorBox>
             </StyledTextColor>
             <StyledColorPicker className={showTextcolor ? "open" : ""}>
@@ -605,7 +606,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
           </StyledInputWrap>
         </StyledInfoItem>
         <StyledInfoItem>
-          <StyledBtnOrange onClick={() => onClickAutoOperation()}>글자 수 자동계산</StyledBtnOrange>
+          <StyledAutoOperatorBtn onClick={() => onClickAutoOperation()}>글자 수 자동계산</StyledAutoOperatorBtn>
         </StyledInfoItem>
         <StyledInfoItem>
           <StyledInfoLabel>제작자</StyledInfoLabel>
@@ -775,6 +776,14 @@ const StyledEditor = styled.div`
   display: flex;
 
   margin: 0 auto;
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-size: 100%;
+    vertical-align: baseline;
+  }
 `;
 
 const StyledContent = styled.div`
@@ -825,7 +834,7 @@ const StyledFormat = styled.div`
 
 const StyledFormatRow = styled.div`
   width: 100%;
-  height: 50px - 15px;
+  height: 35px; // 50 - 15px
   position: relative;
   display: flex;
   justify-content: center;
@@ -953,12 +962,17 @@ const StyledInputWrap = styled.div`
   }
 `;
 
+const StyledAutoOperatorBtn = styled(StyledBtnOrange)`
+  margin: 0 auto;
+  width: 70%;
+`;
+
 const StyledResult = styled(StyledInfoItem)`
   display: flex;
   align-items: flex-end;
   flex-direction: column;
   width: 100%;
-  height: 50px * 3 + 10px;
+  height: 160px; // 150 * 3 + 10
   gap: 10px;
   position: absolute;
   bottom: 10px;

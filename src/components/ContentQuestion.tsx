@@ -271,6 +271,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
 
     const task = tasks[currentSelectTasksIndex];
     const showText = task.showText;
+    console.log("task", task);
 
     if (task.AOI.length > 0 && showText) {
       alert.error("핵심영역 내용이 있다면 반드시 공개해야 합니다.");
