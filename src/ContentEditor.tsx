@@ -22,6 +22,7 @@ import {
   saveContentDataType,
   tasksType,
 } from "./types";
+import { StyledBtn, StyledBtnOrange, StyledBtnRed } from "./styles/Buttons";
 
 interface ContentEditorProps extends CommonComponents {
   data?: saveContentDataType;
@@ -604,9 +605,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
           </StyledInputWrap>
         </StyledInfoItem>
         <StyledInfoItem>
-          <button className="btn btn_orange" onClick={() => onClickAutoOperation()}>
-            글자 수 자동계산
-          </button>
+          <StyledBtnOrange onClick={() => onClickAutoOperation()}>글자 수 자동계산</StyledBtnOrange>
         </StyledInfoItem>
         <StyledInfoItem>
           <StyledInfoLabel>제작자</StyledInfoLabel>
@@ -633,8 +632,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
           />
         </StyledInfoItem>
         <StyledResult style={{ height: data ? 160 : 110 }}>
-          <button
-            className="btn"
+          <StyledBtn
             onClick={() => {
               try {
                 if (!textRef.current) {
@@ -724,13 +722,10 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
             }}
           >
             저장
-          </button>
-          <button className="btn" onClick={() => onClose()}>
-            취소
-          </button>
+          </StyledBtn>
+          <StyledBtn onClick={() => onClose()}>취소</StyledBtn>
           {data && (
-            <button
-              className="btn btn_red"
+            <StyledBtnRed
               onClick={() => {
                 Swal.fire({
                   icon: "warning",
@@ -762,7 +757,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
               }}
             >
               글 삭제
-            </button>
+            </StyledBtnRed>
           )}
         </StyledResult>
       </StyledInformation>
@@ -968,73 +963,4 @@ const StyledResult = styled(StyledInfoItem)`
   position: absolute;
   bottom: 10px;
   right: 10px;
-
-  .btn {
-    width: 100px;
-    height: 35px;
-    margin-top: 5px;
-    margin-left: 10px;
-    margin-bottom: 5px;
-    outline: none;
-    border: none;
-    border-radius: 4px;
-    background-color: #7367f0;
-    color: white;
-    font-size: 12px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-sizing: border-box;
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-    &:hover:not([disabled]) {
-      background-color: #5e50ee;
-      cursor: pointer;
-    }
-  }
-  .btn.selected {
-    background-color: white;
-    color: #7367f0;
-    border: 1px solid #7367f0;
-    transition: 0.2s;
-    &:hover:not([disabled]) {
-      background-color: rgb(240, 240, 240);
-      color: #7367f0;
-      border: 1px solid #7367f0;
-      cursor: pointer;
-    }
-  }
-  .btn_orange {
-    background-color: #fa8128;
-    &:disabled {
-      opacity: 0.7;
-    }
-    &:hover:not([disabled]) {
-      background-color: #ed7014;
-      cursor: pointer;
-    }
-  }
-
-  .btn_green {
-    background-color: #28a745;
-    &:disabled {
-      opacity: 0.7;
-    }
-    &:hover:not([disabled]) {
-      background-color: #218838;
-      cursor: pointer;
-    }
-  }
-  .btn_red {
-    background-color: #dc3545;
-    &:disabled {
-      opacity: 0.7;
-    }
-    &:hover:not([disabled]) {
-      background-color: #c82333;
-      cursor: pointer;
-    }
-  }
 `;

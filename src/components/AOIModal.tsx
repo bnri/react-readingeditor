@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import styles from "./AOIModal.module.scss";
-import classNames from "classnames";
-
-const cx = classNames.bind(styles);
+import styled from "styled-components";
+import { StyledBtn, StyledBtnRed } from "../styles/Buttons";
+import { AOIType, tasksType } from "../types";
 
 interface AOIModalProps {
   AOIModalType: "add" | "fix";
@@ -198,13 +197,12 @@ const AOIModal: React.FC<AOIModalProps> = ({ AOIModalType, AOIdata, onClose, onS
   }, [AOI]);
 
   return (
-    <div className={cx(styles.AOIModal, "no-drag")}>
-      <div className={styles.dark}></div>
-      <div className={styles.contents}>
-        <div className={styles.infoBox}>
-          <div className={styles.inputWrap}>
-            <input
-              className={styles.inputText}
+    <StyledModal className="no-drag">
+      <StyledDark></StyledDark>
+      <StyledContents>
+        <StyledInfoBox>
+          <StyledInputWrap>
+            <StyledInputText
               type="text"
               value={AOI.name}
               placeholder="핵심영역 이름"
@@ -215,38 +213,138 @@ const AOIModal: React.FC<AOIModalProps> = ({ AOIModalType, AOIdata, onClose, onS
                 }));
               }}
             />
-          </div>
-          <div className={styles.buttons}>
-            <button
+          </StyledInputWrap>
+          <StyledButtons>
+            <StyledBtn
               disabled={!AOI.height || !AOI.name ? true : false}
-              className={cx(styles.btn)}
               onClick={() => {
                 onSaveAoi(AOI);
               }}
             >
               영역 {AOIModalType === "add" ? "추가" : "수정"}
-            </button>
-            <button className={cx(styles.btn, styles.btn_red)} onClick={onClose} style={{ marginLeft: "10px" }}>
+            </StyledBtn>
+            <StyledBtnRed onClick={onClose} style={{ marginLeft: "10px" }}>
               취소
-            </button>
-          </div>
-        </div>
+            </StyledBtnRed>
+          </StyledButtons>
+        </StyledInfoBox>
 
-        <div className={styles.canvasWrapper}>
-          <canvas
-            ref={canvasRef}
-            className={styles.canvas}
-            width={740}
-            height={740}
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
+        <StyledCanvasWrap>
+          <StyledCanvas ref={canvasRef} width={740} height={740} style={{ width: "100%", height: "100%" }} />
+        </StyledCanvasWrap>
         {!(AOI.left > 0 && AOI.top > 0 && AOI.width > 0 && AOI.height > 0) && (
-          <div className={styles.dragInfo}>핵심영역을 마우스로 드래그 해주세요</div>
+          <StyledDragInfo>핵심영역을 마우스로 드래그 해주세요</StyledDragInfo>
         )}
-      </div>
-    </div>
+      </StyledContents>
+    </StyledModal>
   );
 };
 
 export default AOIModal;
+
+const StyledModal = styled.div`
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StyledDark = styled.div`
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  z-index: 1;
+`;
+
+const StyledContents = styled.div`
+  width: 100%;
+  height: 100%;
+  /*    border:1px solid black;*/
+  background-color: transparent;
+  outline: 3px solid #fff;
+  /*    border:1px solid black;*/
+  position: relative;
+  z-index: 1002;
+`;
+
+const StyledInfoBox = styled.div`
+  z-index: 1001;
+  position: absolute;
+  border-radius: 5px;
+  background-color: #fff;
+  top: calc(100% - 130px);
+  left: calc(100% + 10px); /*  */
+  height: 130px;
+  width: 270px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  font-size: 22px;
+  font-weight: 700;
+
+  position: relative;
+`;
+
+const StyledInputWrap = styled.div`
+  width: 100%;
+  height: 50px;
+`;
+
+const StyledInputText = styled.input`
+  width: 100%;
+  height: 100%;
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid rgb(200, 200, 200);
+  padding-left: 10px;
+  cursor: pointer;
+  box-sizing: border-box;
+`;
+
+const StyledButtons = styled.div`
+  display: flex;
+  height: 50px;
+  justify-content: flex-end;
+  align-items: center;
+`;
+
+const StyledCanvasWrap = styled.div`
+  z-index: 1001;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 740px;
+  height: 740px;
+`;
+
+const StyledCanvas = styled.canvas`
+  cursor: crosshair;
+`;
+
+const StyledDragInfo = styled.div`
+  position: absolute;
+  top: -55px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 50px;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: red;
+  color: white;
+  z-index: 1000;
+`;
