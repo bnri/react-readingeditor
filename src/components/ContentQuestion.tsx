@@ -8,6 +8,7 @@ import FontSVG from "../assets/svg/FontSVG";
 interface ContentQuestionProps extends CommonComponents {
   taskList: tasksType[];
   isOverflow?: boolean;
+  viewOnly?: boolean;
   onUpdateTasks: (tasks: tasksType[]) => void;
   onUpdateSelectQuestionIndex: (idx: number) => void;
   onUpdateCanvasAOIIndex: (idx: number) => void;
@@ -18,6 +19,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
   alert,
   isOverflow,
   taskList,
+  viewOnly,
   onUpdateTasks,
   onUpdateSelectQuestionIndex,
   onUpdateCanvasAOIIndex,
@@ -340,7 +342,12 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                   {tasks.map((task, idx) => {
                     const isFixThis = fixText && fixText.type === "question" && fixText.idx === idx ? true : false;
                     return (
-                      <Draggable key={`task_${idx}`} draggableId={`task_${idx}`} index={idx} isDragDisabled={idx === 0}>
+                      <Draggable
+                        key={`task_${idx}`}
+                        draggableId={`task_${idx}`}
+                        index={idx}
+                        isDragDisabled={idx === 0 || viewOnly}
+                      >
                         {(provided, snapshot) => {
                           let cn = [];
                           if (currentSelectTasksIndex === idx) {
@@ -363,6 +370,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                 }
                               }}
                               onDoubleClick={() => {
+                                if (viewOnly) {
+                                  return;
+                                }
                                 if (idx === 0) {
                                   alert.error("1번 문제는 수정할 수 없습니다.");
                                   return;
@@ -401,7 +411,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                   setFixText(undefined);
                                 }}
                               />
-                              {idx !== 0 && !isFixThis && (
+                              {!viewOnly && idx !== 0 && !isFixThis && (
                                 <div className="editWrap">
                                   <button
                                     onClick={(e) => {
@@ -431,7 +441,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                       </Draggable>
                     );
                   })}
-                  {tasks.length < 11 && (
+                  {!viewOnly && tasks.length < 11 && (
                     <Draggable key={`task_add`} draggableId={`task_add`} index={tasks.length} isDragDisabled={true}>
                       {(provided) => (
                         <li
@@ -471,7 +481,15 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
               보기 항목&nbsp;<span style={{ fontSize: "0.8rem" }}>(최대 5개)</span>
             </StyledQuestionTitle>
             <StyledOpenText>
-              <BounceCheckbox checked={tasks[currentSelectTasksIndex].showText} onChange={() => invertShowText()} />
+              <BounceCheckbox
+                checked={tasks[currentSelectTasksIndex].showText}
+                onChange={() => {
+                  if (viewOnly) {
+                    return;
+                  }
+                  invertShowText();
+                }}
+              />
               문제 풀 때 지문 공개
             </StyledOpenText>
             <DragDropContext
@@ -499,7 +517,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                           key={`opt_${idx}`}
                           draggableId={`opt_${idx}`}
                           index={idx}
-                          isDragDisabled={currentSelectTasksIndex === 0}
+                          isDragDisabled={currentSelectTasksIndex === 0 || viewOnly}
                         >
                           {(provided, snapshot) => {
                             const cn = [];
@@ -517,6 +535,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                 key={`opt_${idx}`}
                                 className={cn.join(" ")}
                                 onDoubleClick={() => {
+                                  if (viewOnly) {
+                                    return;
+                                  }
                                   if (currentSelectTasksIndex === 0) {
                                     alert.error("1번 문제는 수정할 수 없습니다.");
                                     return;
@@ -555,7 +576,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                     setFixText(undefined);
                                   }}
                                 />
-                                {currentSelectTasksIndex !== 0 && !isFixThis && (
+                                {!viewOnly && currentSelectTasksIndex !== 0 && !isFixThis && (
                                   <div className="editWrap">
                                     <button
                                       title="정답 체크"
@@ -623,7 +644,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                         </Draggable>
                       );
                     })}
-                    {tasks[currentSelectTasksIndex].options.length < 5 && (
+                    {!viewOnly && tasks[currentSelectTasksIndex].options.length < 5 && (
                       <Draggable
                         key={`opt_add`}
                         draggableId={`opt_add`}
@@ -679,7 +700,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                 {(provided) => (
                   <StyledAOIList {...provided.droppableProps} ref={provided.innerRef}>
                     {tasks[currentSelectTasksIndex].AOI.map((aoi, idx) => (
-                      <Draggable key={`aoi_${idx}`} draggableId={`aoi_${idx}`} index={idx}>
+                      <Draggable key={`aoi_${idx}`} draggableId={`aoi_${idx}`} index={idx} isDragDisabled={viewOnly}>
                         {(provided, snapshot) => {
                           const cn = [];
                           if (snapshot.isDragging) {
@@ -698,7 +719,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                               <span>
                                 {idx + 1}. {aoi.name}
                               </span>
-                              {currentSelectTasksIndex !== 0 && (
+                              {!viewOnly && currentSelectTasksIndex !== 0 && (
                                 <div className="editWrap">
                                   <button
                                     title="수정"
@@ -748,7 +769,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                         }}
                       </Draggable>
                     ))}
-                    {currentSelectTasksIndex !== 0 && tasks[currentSelectTasksIndex].AOI.length < 3 && (
+                    {!viewOnly && currentSelectTasksIndex !== 0 && tasks[currentSelectTasksIndex].AOI.length < 3 && (
                       <Draggable
                         key={`aoi_add`}
                         draggableId={`aoi_add`}

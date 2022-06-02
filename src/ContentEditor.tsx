@@ -124,6 +124,13 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
         //       height: 0.132,
         //       name: "사과 채집시기 위치",
         //     },
+        //     {
+        //       left: 0.4,
+        //       top: 0.2,
+        //       width: 0.436,
+        //       height: 0.132,
+        //       name: "사과 채집시기 위치2",
+        //     },
         //   ],
         // },
       ];
@@ -367,7 +374,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
             style={{ ...textStyle, border: isOverflow ? "none" : "1px solid #333" }}
             ref={textRef}
             isOverflow={isOverflow}
-            editable={true}
+            editable={viewOnly ? false : true}
             contentText={contentText}
             onUpdateText={(html) => setContentText(html)}
           />
@@ -513,6 +520,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
           alert={alert}
           taskList={tasks}
           Swal={Swal}
+          viewOnly={viewOnly}
           isOverflow={isOverflow}
           onUpdateTasks={(t) => setTasks(t)}
           onUpdateCanvasAOIIndex={(idx) => setShowCanvasAOI(idx)}
