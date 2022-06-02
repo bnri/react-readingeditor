@@ -1,3 +1,6 @@
+import { CSSProperties } from "react";
+import { StandardLonghandPropertiesHyphen } from "csstype";
+import { AlertContainer } from "react-alert";
 import Swal from "sweetalert2";
 import { ReactSweetAlert } from "sweetalert2-react-content";
 
@@ -37,7 +40,7 @@ interface saveContentDataType {
     charCount: number;
     tasks: tasksType[];
     html: string;
-    css: CSSProperties;
+    css: { [key: string]: string };
   };
   textset: {
     textset_idx?: number;
@@ -66,6 +69,6 @@ type fixTextType = { text: string; index: number };
 type fixAoiType = { aoi: AOIType; index: number };
 type drawrectType = (name: string, x: number, y: number, width: number, height: number, color: string) => void;
 
-type getCSSObjType = (el: HTMLElement) => CSSProperties;
+type getCSSObjType = (el: HTMLElement) => { [key: string]: string };
 type cloneDivType = (html: string, cssobj: CSSProperties) => HTMLDivElement;
 type swapTaskType = (type: "question" | "options" | "AOI", oldIdx: number, newIdx: number) => void;

@@ -19,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rmdir /S /Q dist && tsc",
+    "build": "rmdir /S /Q dist && tsc && copy src\\types.d.ts dist\\types.d.ts",
     "patch": "npm version patch && npm publish && git push origin master"
   },
   "eslintConfig": {

@@ -51,7 +51,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
   const [selectFontSize, setSelectFontSize] = useState<string>(() => (data ? data.text.css["font-size"] : "36px"));
 
   const [selectLineHeight, setSelectLineHeight] = useState<string>(() => {
-    if (data) {
+    if (data && data.text.css) {
       const lineHeight = +data.text.css["line-height"].replace("px", "");
       const fontSize = +data.text.css["font-size"].replace("px", "");
       return `${((lineHeight / fontSize) * 100).toFixed(0)}%`;
