@@ -449,34 +449,31 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
           </StyledToolbarItem>
         </StyledFormatRow>
         <StyledFormatRow>
-          <StyledToolbarIcon>
-            <StyledToolbarItem
-              className={fontWeight === "700" ? "active" : ""}
-              onClick={() => setFontWeight((state) => (state === "700" ? "400" : "700"))}
-            >
-              <i className="fa fa-bold" aria-hidden="true"></i>
-            </StyledToolbarItem>
+          <StyledToolbarIcon
+            style={{ width: "25%" }}
+            className={fontWeight === "700" ? "active" : ""}
+            onClick={() => setFontWeight((state) => (state === "700" ? "400" : "700"))}
+          >
+            <FontSVG type="bold" currentColor={fontWeight === "700" ? "#7367f0" : undefined} />
           </StyledToolbarIcon>
-          <StyledToolbarIcon>
-            <StyledToolbarItem
-              className={textDecoration === "underline" ? "active" : ""}
-              onClick={() => setTextDecoration((state) => (state === "underline" ? "none" : "underline"))}
-            >
-              <i className="fa fa-underline" aria-hidden="true"></i>
-            </StyledToolbarItem>
+          <StyledToolbarIcon
+            style={{ width: "25%" }}
+            className={textDecoration === "underline" ? "active" : ""}
+            onClick={() => setTextDecoration((state) => (state === "underline" ? "none" : "underline"))}
+          >
+            <FontSVG type="underline" currentColor={textDecoration === "underline" ? "#7367f0" : undefined} />
           </StyledToolbarIcon>
-          <StyledToolbarIcon>
-            <StyledToolbarItem
-              className={fontStyle === "italic" ? "active" : ""}
-              onClick={() => setFontStyle((state) => (state === "italic" ? "normal" : "italic"))}
-            >
-              <i className="fa fa-italic" aria-hidden="true"></i>
-            </StyledToolbarItem>
+          <StyledToolbarIcon
+            style={{ width: "25%" }}
+            className={fontStyle === "italic" ? "active" : ""}
+            onClick={() => setFontStyle((state) => (state === "italic" ? "normal" : "italic"))}
+          >
+            <FontSVG type="italic" currentColor={fontStyle === "italic" ? "#7367f0" : undefined} />
           </StyledToolbarIcon>
 
-          <StyledToolbarIcon ref={textcolorRef}>
+          <StyledToolbarIcon style={{ width: "25%" }} ref={textcolorRef}>
             <StyledTextColor onClick={() => setShowTextcolor((state) => !state)}>
-              <FontSVG />
+              <FontSVG type="font" />
               <StyledColorBox style={{ background: textcolor }}></StyledColorBox>
             </StyledTextColor>
             <StyledColorPicker className={showTextcolor ? "open" : ""}>
@@ -491,6 +488,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
         </StyledFormatRow>
         <StyledFormatRow>
           <StyledToolbarIcon
+            style={{ width: "100%" }}
             onClick={() => {
               const text = textRef.current?.textContent || "";
               setContentText(text);
@@ -839,7 +837,7 @@ const StyledFormatRow = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  /* gap: 10px; */
 `;
 
 const StyledToolbarItem = styled.div`
@@ -858,7 +856,6 @@ const StyledToolbarItem = styled.div`
 `;
 
 const StyledToolbarIcon = styled.div`
-  font-size: 14px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -867,6 +864,7 @@ const StyledToolbarIcon = styled.div`
   border: none;
 
   cursor: pointer;
+  height: 70%;
 
   &:hover {
     color: #7367f0;
@@ -874,10 +872,9 @@ const StyledToolbarIcon = styled.div`
 `;
 
 const StyledTextColor = styled(StyledToolbarItem)`
-  @import url("https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap");
   font-family: "Roboto Slab", serif;
   position: relative;
-  font-size: 20px;
+  height: 100%;
 `;
 
 const StyledColorBox = styled.div`

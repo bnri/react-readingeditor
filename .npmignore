@@ -1,3 +1,5 @@
 *
 !dist/components/**/*.d.ts
 !dist/components/**/*.js
+!dist/ContentEditor.d.ts
+!dist/ContentEditor.js

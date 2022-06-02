@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { memo, useCallback, useEffect, useState } from "react";
 import { AOIType, CommonComponents, swapTaskType, tasksType } from "../types";
+import FontSVG from "../assets/svg/FontSVG";
 
 interface ContentQuestionProps extends CommonComponents {
   taskList: tasksType[];
@@ -412,7 +413,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                       });
                                     }}
                                   >
-                                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    <FontSVG type="edit" />
                                   </button>
                                   <button
                                     onClick={(e) => {
@@ -420,7 +421,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                       deleteQuestion(idx);
                                     }}
                                   >
-                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                    <FontSVG type="trash" />
                                   </button>
                                 </div>
                               )}
@@ -451,13 +452,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                               }
                             }}
                           />
-                          <i
-                            className="fa fa-plus"
-                            aria-hidden="true"
-                            onClick={() => {
-                              addQuestion();
-                            }}
-                          ></i>
+                          <div className="svgWrapper" onClick={() => addQuestion()}>
+                            <FontSVG type="add" />
+                          </div>
                         </li>
                       )}
                     </Draggable>
@@ -567,7 +564,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                         setCorrect(idx);
                                       }}
                                     >
-                                      <i className="fa fa-check-square-o" aria-hidden="true"></i>
+                                      <FontSVG type="check" />
                                     </button>
                                     <button
                                       title="수정"
@@ -580,7 +577,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                         });
                                       }}
                                     >
-                                      <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                      <FontSVG type="edit" />
                                     </button>
                                     <button
                                       title="삭제"
@@ -616,7 +613,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                         );
                                       }}
                                     >
-                                      <i className="fa fa-trash" aria-hidden="true"></i>
+                                      <FontSVG type="trash" />
                                     </button>
                                   </div>
                                 )}
@@ -652,7 +649,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                 }
                               }}
                             />
-                            <i className="fa fa-plus" aria-hidden="true" onClick={() => addOption()}></i>
+                            <div className="svgWrapper" onClick={() => addOption()}>
+                              <FontSVG type="add" />
+                            </div>
                           </li>
                         )}
                       </Draggable>
@@ -711,7 +710,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                       });
                                     }}
                                   >
-                                    <i className="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                    <FontSVG type="edit" />
                                   </button>
                                   <button
                                     title="삭제"
@@ -740,7 +739,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                       onUpdateCanvasAOIIndex(-1);
                                     }}
                                   >
-                                    <i className="fa fa-trash" aria-hidden="true"></i>
+                                    <FontSVG type="trash" />
                                   </button>
                                 </div>
                               )}
@@ -783,7 +782,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                               onUpdateAOIMode("add");
                             }}
                           >
-                            <i className="fa fa-plus" aria-hidden="true"></i>
+                            <div className="svgWrapper">
+                              <FontSVG type="add" />
+                            </div>
                           </li>
                         )}
                       </Draggable>
@@ -875,9 +876,21 @@ const StyledQuestionCommonList = styled.ul`
       }
     }
 
-    &.addItem i {
+    &.addItem .svgWrapper,
+    &.addRange .svgWrapper {
       margin: 0 5px;
-      font-size: 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      &:hover {
+        svg {
+          fill: #000;
+        }
+      }
+      svg {
+        fill: #333;
+        height: 80%;
+      }
     }
 
     &.correct {
@@ -924,13 +937,19 @@ const StyledQuestionCommonList = styled.ul`
       display: flex;
       gap: 5px;
       transition: 0.2s;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
       button {
+        height: 70%;
         cursor: pointer;
         border: none;
         outline: none;
         background-color: transparent;
         &:hover {
-          color: #fff;
+          svg {
+            fill: #fff;
+          }
         }
         i {
           font-size: 20px;

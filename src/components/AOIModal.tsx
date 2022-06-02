@@ -284,7 +284,7 @@ const StyledInfoBox = styled.div`
   left: calc(100% + 10px); /*  */
   height: 130px;
   width: 270px;
-  padding: 10px;
+  padding: 10px !important;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -306,7 +306,7 @@ const StyledInputText = styled.input`
   outline: none;
   border-radius: 4px;
   border: 1px solid rgb(200, 200, 200);
-  padding-left: 10px;
+  padding-left: 10px !important;
   cursor: pointer;
   box-sizing: border-box;
 `;
