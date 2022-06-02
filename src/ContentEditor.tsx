@@ -26,6 +26,7 @@ import { StyledBtn, StyledBtnOrange, StyledBtnRed } from "./styles/Buttons";
 import FontSVG from "./assets/svg/FontSVG";
 
 interface ContentEditorProps extends CommonComponents {
+  viewOnly?: boolean;
   data?: saveContentDataType;
   setLoading: Dispatch<React.SetStateAction<boolean>>;
   onClose: (goRefresh?: boolean) => void;
@@ -33,7 +34,16 @@ interface ContentEditorProps extends CommonComponents {
   onDelete: ContentDeleteHandler;
 }
 
-const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, data, onClose, onSave, onDelete }) => {
+const ContentEditor: React.FC<ContentEditorProps> = ({
+  alert,
+  Swal,
+  setLoading,
+  data,
+  onClose,
+  onSave,
+  onDelete,
+  viewOnly,
+}) => {
   const { fontList, languageList, textTypeList, textLevelList, textActiveList, textContentLevelList } = useInfoList();
   const [textTitle, setTextTitle] = useInput(data ? data.text.name : "");
   const [textLanguage, setTextLanguage] = useState(() => (data ? data.text.language : languageList[0]));
@@ -630,100 +640,102 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
             textAlign="center"
           />
         </StyledInfoItem>
-        <StyledResult style={{ height: data ? 160 : 110 }}>
-          <StyledBtn
-            onClick={() => {
-              try {
-                if (!textRef.current) {
-                  throw new Error("글 내용을 가져올 수 없습니다.");
-                }
-
-                const html = textRef.current.innerHTML;
-                const css = getCssObj(textRef.current);
-
-                if (textTitle === "") {
-                  throw new Error("글 제목을 입력해주세요.");
-                }
-
-                if (html === "" || html === `내용을 입력해주세요.`) {
-                  throw new Error("글 내용을 입력해주세요.");
-                }
-
-                if (isOverflow) {
-                  throw new Error("글 내용이 영역 안으로 들어가게 해주세요.");
-                }
-
-                if (lineCount === 0 || wordCount === 0 || sentenceCount === 0 || charCount === 0) {
-                  throw new Error("줄, 문장, 어절, 글자 수를 입력해주세요.");
-                }
-
-                for (let i = 1; i < tasks.length; i++) {
-                  if (tasks[i].options.length === 0) {
-                    throw new Error(`${i + 1}번 문제 보기를 추가해주세요.`);
+        <StyledResult style={{ height: viewOnly ? 60 : data ? 160 : 110 }}>
+          {!viewOnly && (
+            <StyledBtn
+              onClick={() => {
+                try {
+                  if (!textRef.current) {
+                    throw new Error("글 내용을 가져올 수 없습니다.");
                   }
-                  if (!tasks[i].correctOption) {
-                    throw new Error(`${i + 1}번 문제 정답을 설정해주세요.`);
+
+                  const html = textRef.current.innerHTML;
+                  const css = getCssObj(textRef.current);
+
+                  if (textTitle === "") {
+                    throw new Error("글 제목을 입력해주세요.");
+                  }
+
+                  if (html === "" || html === `내용을 입력해주세요.`) {
+                    throw new Error("글 내용을 입력해주세요.");
+                  }
+
+                  if (isOverflow) {
+                    throw new Error("글 내용이 영역 안으로 들어가게 해주세요.");
+                  }
+
+                  if (lineCount === 0 || wordCount === 0 || sentenceCount === 0 || charCount === 0) {
+                    throw new Error("줄, 문장, 어절, 글자 수를 입력해주세요.");
+                  }
+
+                  for (let i = 1; i < tasks.length; i++) {
+                    if (tasks[i].options.length === 0) {
+                      throw new Error(`${i + 1}번 문제 보기를 추가해주세요.`);
+                    }
+                    if (!tasks[i].correctOption) {
+                      throw new Error(`${i + 1}번 문제 정답을 설정해주세요.`);
+                    }
+                  }
+
+                  const saveObject: saveContentDataType = {
+                    text: {
+                      editor_version: "2.0.0",
+                      name: textTitle,
+                      language: textLanguage,
+                      level: textLevel,
+                      level_changed: textLevel,
+                      domain: textType,
+                      wordCount: wordCount,
+                      lineCount: lineCount,
+                      sentenceCount: sentenceCount,
+                      charCount: charCount,
+                      tasks: tasks,
+                      html: html,
+                      css: { ...css, border: "none" },
+                    },
+                    textset: {
+                      textActive: textActive,
+                      textContentLevel: textContentLevel,
+                    },
+                  };
+
+                  if (!data) {
+                    // add
+                    setLoading(true);
+                    onSave("add", saveObject).then((res) => {
+                      if (res.valid) {
+                        alert.success("저장 성공");
+                        onClose(true);
+                      } else {
+                        alert.error("저장 실패");
+                        console.error(res.msg);
+                      }
+                    });
+                  } else {
+                    // fix
+                    setLoading(true);
+                    onSave("fix", saveObject).then((res) => {
+                      if (res.valid) {
+                        alert.success("수정 성공");
+                        onClose(true);
+                      } else {
+                        alert.error("수정 실패");
+                        console.error(res.msg);
+                      }
+                    });
+                  }
+                } catch (err) {
+                  if (err instanceof Error) {
+                    alert.error(err.message);
                   }
                 }
-
-                const saveObject: saveContentDataType = {
-                  text: {
-                    editor_version: "2.0.0",
-                    name: textTitle,
-                    language: textLanguage,
-                    level: textLevel,
-                    level_changed: textLevel,
-                    domain: textType,
-                    wordCount: wordCount,
-                    lineCount: lineCount,
-                    sentenceCount: sentenceCount,
-                    charCount: charCount,
-                    tasks: tasks,
-                    html: html,
-                    css: { ...css, border: "none" },
-                  },
-                  textset: {
-                    textActive: textActive,
-                    textContentLevel: textContentLevel,
-                  },
-                };
-
-                if (!data) {
-                  // add
-                  setLoading(true);
-                  onSave("add", saveObject).then((res) => {
-                    if (res.valid) {
-                      alert.success("저장 성공");
-                      onClose(true);
-                    } else {
-                      alert.error("저장 실패");
-                      console.error(res.msg);
-                    }
-                  });
-                } else {
-                  // fix
-                  setLoading(true);
-                  onSave("fix", saveObject).then((res) => {
-                    if (res.valid) {
-                      alert.success("수정 성공");
-                      onClose(true);
-                    } else {
-                      alert.error("수정 실패");
-                      console.error(res.msg);
-                    }
-                  });
-                }
-              } catch (err) {
-                if (err instanceof Error) {
-                  alert.error(err.message);
-                }
-              }
-            }}
-          >
-            저장
-          </StyledBtn>
+              }}
+            >
+              저장
+            </StyledBtn>
+          )}
           <StyledBtn onClick={() => onClose()}>취소</StyledBtn>
-          {data && (
+          {!viewOnly && data && (
             <StyledBtnRed
               onClick={() => {
                 Swal.fire({

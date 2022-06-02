@@ -21,6 +21,7 @@ const App: React.FC<AppProps> = ({ Swal }) => {
       <button onClick={() => setShowEditor((state) => !state)}>toggle</button>
       {showEditor && (
         <ContentEditor
+          viewOnly={true}
           Swal={Swal}
           alert={alert}
           setLoading={setLoading}
