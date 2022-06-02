@@ -1,5 +1,4 @@
 import { CSSProperties } from "react";
-import { StandardLonghandPropertiesHyphen } from "csstype";
 import { AlertContainer } from "react-alert";
 import Swal from "sweetalert2";
 import { ReactSweetAlert } from "sweetalert2-react-content";
