@@ -25,6 +25,7 @@ interface tasksType {
 }
 
 interface saveContentDataType {
+  maker?: string;
   text: {
     text_idx?: number;
     editor_version: string;
@@ -45,6 +46,7 @@ interface saveContentDataType {
     textset_idx?: number;
     textActive: string;
     textContentLevel: string;
+    textInform: string;
   };
 }
 
@@ -53,10 +55,7 @@ interface BaseResponseDataType {
   msg: string;
 }
 
-type ContentSaveHandler = (
-  type: "add" | "fix" | "delete",
-  saveObject: saveContentDataType
-) => Promise<BaseResponseDataType>;
+type ContentSaveHandler = (type: "add" | "fix" | "delete", saveObject: saveContentDataType) => Promise<BaseResponseDataType>;
 
 type ContentDeleteHandler = () => Promise<BaseResponseDataType>;
 

@@ -26,6 +26,7 @@ import { StyledBtn, StyledBtnOrange, StyledBtnRed } from "./styles/Buttons";
 import FontSVG from "./assets/svg/FontSVG";
 
 interface ContentEditorProps extends CommonComponents {
+  maker: string;
   viewOnly?: boolean;
   data?: saveContentDataType;
   setLoading: Dispatch<React.SetStateAction<boolean>>;
@@ -34,7 +35,7 @@ interface ContentEditorProps extends CommonComponents {
   onDelete: ContentDeleteHandler;
 }
 
-const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, data, onClose, onSave, onDelete, viewOnly }) => {
+const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLoading, data, onClose, onSave, onDelete, viewOnly }) => {
   const { fontList, languageList, textTypeList, textLevelList, textActiveList, textContentLevelList } = useInfoList();
   const [textTitle, setTextTitle] = useInput(data ? data.text.name : "");
   const [textLanguage, setTextLanguage] = useState(() => (data ? data.text.language : languageList[0]));
@@ -71,6 +72,8 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
   const [sentenceCount, setSentenceCount] = useState<number>(() => (data ? data.text.sentenceCount : 0));
   const [wordCount, setWordCount] = useState<number>(() => (data ? data.text.wordCount : 0));
   const [charCount, setCharCount] = useState<number>(() => (data ? data.text.charCount : 0));
+
+  const [textInform, setTextInform] = useState<string>(() => (data ? data.textset.textInform : ""));
 
   const [contentText, setContentText] = useState(() =>
     // `&nbsp;야생 사과는 키르기스스탄과 중국 서부에 위치한 톈산 산맥과 타림 분지가 원산지로, 이후 전 세계에 퍼지게 되었다. 참고로 다른 과일인 배와 복숭아도 같은 지역이 원산지이다. <br/>&nbsp;사람들은 적어도 기원전 6500년경부터 야생 사과를 채집하기 시작했고, 이후 재배를 하면서 교잡과 접붙이기, 가지치기를 통해 크기를 더 키우고 입맛에 맞는 품종으로 개량했다. 그 결과 현대의 사과가 탄생했다. 현대 사과는 유전자 분석 결과, 적어도 4종의 야생 사과가 섞여 있다고 한다. 이렇게 탄생한 사과는 실크로드를 통해 유라시아 전역으로 퍼졌으며, 이 때문에 고대 교역로 곳곳에서 보관된 사과 씨앗과 묘목이 발견된다.`
@@ -488,6 +491,8 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
         <ContentQuestion
           alert={alert}
           taskList={tasks}
+          textInform={textInform}
+          setTextInform={setTextInform}
           Swal={Swal}
           viewOnly={viewOnly}
           isOverflow={isOverflow}
@@ -595,7 +600,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
         </StyledInfoItem>
         <StyledInfoItem>
           <StyledInfoLabel>제작자</StyledInfoLabel>
-          <span style={{ width: "65%", textAlign: "center" }}>jeong</span>
+          <span style={{ width: "65%", textAlign: "center" }}>{maker}</span>
         </StyledInfoItem>
         <StyledInfoItem>
           <StyledInfoLabel>활성화</StyledInfoLabel>
@@ -673,6 +678,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, 
                     textset: {
                       textActive: textActive,
                       textContentLevel: textContentLevel,
+                      textInform: textInform,
                     },
                   };
 

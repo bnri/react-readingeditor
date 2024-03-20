@@ -14,6 +14,7 @@ const App: React.FC<AppProps> = ({ Swal }) => {
   const [showEditor, setShowEditor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selRowText, setSelRowText] = useState();
+  const maker = "jeong";
 
   return (
     <div className="App">
@@ -25,6 +26,7 @@ const App: React.FC<AppProps> = ({ Swal }) => {
           Swal={Swal}
           alert={alert}
           setLoading={setLoading}
+          maker={maker}
           data={selRowText}
           onClose={(goRefresh = false) => {
             setShowEditor(false);

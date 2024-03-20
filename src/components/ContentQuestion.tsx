@@ -9,6 +9,8 @@ interface ContentQuestionProps extends CommonComponents {
   taskList: tasksType[];
   isOverflow?: boolean;
   viewOnly?: boolean;
+  textInform: string;
+  setTextInform: (value: string) => void;
   onUpdateTasks: (tasks: tasksType[]) => void;
   onUpdateSelectQuestionIndex: (idx: number) => void;
   onUpdateCanvasAOIIndex: (idx: number) => void;
@@ -16,6 +18,8 @@ interface ContentQuestionProps extends CommonComponents {
 }
 
 const ContentQuestion: React.FC<ContentQuestionProps> = ({
+  textInform,
+  setTextInform,
   alert,
   isOverflow,
   taskList,
@@ -108,17 +112,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
       return;
     }
 
-    onUpdateTasks(
-      tasks.map((task, idx) =>
-        idx === currentSelectTasksIndex ? { ...task, options: [...options, addOptionText] } : task
-      )
-    );
+    onUpdateTasks(tasks.map((task, idx) => (idx === currentSelectTasksIndex ? { ...task, options: [...options, addOptionText] } : task)));
 
-    setTasks((state) =>
-      state.map((task, idx) =>
-        idx === currentSelectTasksIndex ? { ...task, options: [...options, addOptionText] } : task
-      )
-    );
+    setTasks((state) => state.map((task, idx) => (idx === currentSelectTasksIndex ? { ...task, options: [...options, addOptionText] } : task)));
 
     setAddOptionText("");
   }, [alert, tasks, addOptionText, currentSelectTasksIndex, onUpdateTasks]);
@@ -342,12 +338,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                   {tasks.map((task, idx) => {
                     const isFixThis = fixText && fixText.type === "question" && fixText.idx === idx ? true : false;
                     return (
-                      <Draggable
-                        key={`task_${idx}`}
-                        draggableId={`task_${idx}`}
-                        index={idx}
-                        isDragDisabled={idx === 0 || viewOnly}
-                      >
+                      <Draggable key={`task_${idx}`} draggableId={`task_${idx}`} index={idx} isDragDisabled={idx === 0 || viewOnly}>
                         {(provided, snapshot) => {
                           let cn = [];
                           if (currentSelectTasksIndex === idx) {
@@ -444,12 +435,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                   {!viewOnly && tasks.length < 11 && (
                     <Draggable key={`task_add`} draggableId={`task_add`} index={tasks.length} isDragDisabled={true}>
                       {(provided) => (
-                        <li
-                          ref={provided.innerRef}
-                          {...provided.dragHandleProps}
-                          {...provided.draggableProps}
-                          className="addItem"
-                        >
+                        <li ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps} className="addItem">
                           <span style={{ marginRight: 5 }}>{tasks.length + 1}.</span>
                           <input
                             className="edit"
@@ -609,10 +595,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                             idx === currentSelectTasksIndex
                                               ? {
                                                   ...task,
-                                                  correctOption:
-                                                    task.options[idx] === task.correctOption
-                                                      ? null
-                                                      : task.correctOption,
+                                                  correctOption: task.options[idx] === task.correctOption ? null : task.correctOption,
                                                   options: task.options.filter((o) => o !== opt),
                                                 }
                                               : task
@@ -623,10 +606,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                                             idx === currentSelectTasksIndex
                                               ? {
                                                   ...task,
-                                                  correctOption:
-                                                    task.options[idx] === task.correctOption
-                                                      ? null
-                                                      : task.correctOption,
+                                                  correctOption: task.options[idx] === task.correctOption ? null : task.correctOption,
                                                   options: task.options.filter((o) => o !== opt),
                                                 }
                                               : task
@@ -645,19 +625,9 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                       );
                     })}
                     {!viewOnly && tasks[currentSelectTasksIndex].options.length < 5 && (
-                      <Draggable
-                        key={`opt_add`}
-                        draggableId={`opt_add`}
-                        index={tasks[currentSelectTasksIndex].options.length}
-                        isDragDisabled={true}
-                      >
+                      <Draggable key={`opt_add`} draggableId={`opt_add`} index={tasks[currentSelectTasksIndex].options.length} isDragDisabled={true}>
                         {(provided) => (
-                          <li
-                            className="addItem"
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
+                          <li className="addItem" ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                             <span style={{ marginRight: 5 }}>{tasks[currentSelectTasksIndex].options.length + 1}.</span>
                             <input
                               className="edit"
@@ -770,12 +740,7 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
                       </Draggable>
                     ))}
                     {!viewOnly && currentSelectTasksIndex !== 0 && tasks[currentSelectTasksIndex].AOI.length < 3 && (
-                      <Draggable
-                        key={`aoi_add`}
-                        draggableId={`aoi_add`}
-                        index={tasks[currentSelectTasksIndex].AOI.length}
-                        isDragDisabled={true}
-                      >
+                      <Draggable key={`aoi_add`} draggableId={`aoi_add`} index={tasks[currentSelectTasksIndex].AOI.length} isDragDisabled={true}>
                         {(provided) => (
                           <li
                             ref={provided.innerRef}
@@ -817,6 +782,14 @@ const ContentQuestion: React.FC<ContentQuestionProps> = ({
             </DragDropContext>
           </StyledAOI>
         </StyledOptionWrap>
+        <StyledInformWrapper>
+          <StyledQuestionTitle>
+            텍스트 정보&nbsp;<span style={{ fontSize: "0.8rem" }}>(선택사항)</span>
+          </StyledQuestionTitle>
+          <div>
+            <input type="text" placeholder="텍스트 정보를 입력해주세요." value={textInform} onChange={(e) => setTextInform(e.target.value)} />
+          </div>
+        </StyledInformWrapper>
       </>
     );
   } else {
@@ -981,8 +954,8 @@ const StyledQuestionCommonList = styled.ul`
 `;
 
 const StyledQuestionList = styled(StyledQuestionCommonList)`
-  min-height: 316px;
-  max-height: 316px;
+  min-height: 206px;
+  max-height: 206px;
 `;
 const StyledOptionList = styled(StyledQuestionCommonList)`
   min-height: 177px;
@@ -1003,3 +976,22 @@ const StyledOpenText = styled.div`
 `;
 
 const StyledAOI = styled.div``;
+
+const StyledInformWrapper = styled.div`
+  min-height: 100px;
+  max-height: 100px;
+
+  input {
+    width: 100%;
+    height: 40px;
+
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+
+    border: 1px solid #333;
+    outline: none;
+    background-color: transparent;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+`;
