@@ -34,25 +34,14 @@ interface ContentEditorProps extends CommonComponents {
   onDelete: ContentDeleteHandler;
 }
 
-const ContentEditor: React.FC<ContentEditorProps> = ({
-  alert,
-  Swal,
-  setLoading,
-  data,
-  onClose,
-  onSave,
-  onDelete,
-  viewOnly,
-}) => {
+const ContentEditor: React.FC<ContentEditorProps> = ({ alert, Swal, setLoading, data, onClose, onSave, onDelete, viewOnly }) => {
   const { fontList, languageList, textTypeList, textLevelList, textActiveList, textContentLevelList } = useInfoList();
   const [textTitle, setTextTitle] = useInput(data ? data.text.name : "");
   const [textLanguage, setTextLanguage] = useState(() => (data ? data.text.language : languageList[0]));
   const [textType, setTextType] = useState(() => (data ? data.text.domain : textTypeList[0]));
   const [textLevel, setTextLevel] = useState(() => (data ? data.text.level : textLevelList[0]));
   const [textActive, setTextActive] = useState(() => (data ? data.textset.textActive : textActiveList[0]));
-  const [textContentLevel, setTextContentLevel] = useState(() =>
-    data ? data.textset.textContentLevel : textContentLevelList[0]
-  );
+  const [textContentLevel, setTextContentLevel] = useState(() => (data ? data.textset.textContentLevel : textContentLevelList[0]));
 
   // const [selectAlign] = useState<"justify" | "left" | "center" | "right">("justify");
   const selectAlign = useMemo<Property.TextAlign>(() => "justify", []);
@@ -71,9 +60,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
   });
 
   const [fontWeight, setFontWeight] = useState<string>(() => (data ? data.text.css["font-weight"] : "400"));
-  const [textDecoration, setTextDecoration] = useState<string>(() =>
-    data ? data.text.css["text-decoration"] : "none"
-  );
+  const [textDecoration, setTextDecoration] = useState<string>(() => (data ? data.text.css["text-decoration"] : "none"));
   const [fontStyle, setFontStyle] = useState<string>(() => (data ? data.text.css["font-style"] : "normal"));
 
   const [showTextcolor, setShowTextcolor] = useState(false);
@@ -277,9 +264,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
     }
 
     // var sentencecount = text.match(/[.?!](\s|$)/g) ? text.match(/[.?!](\s|$)/g).length : 0;
-    const sentencecount = text.match(/[^.!?]+[.!?"]+[^".!?]|.+$/g)
-      ? text.match(/[^.!?]+[.!?"]+[^".!?]|.+$/g)?.length
-      : 0;
+    const sentencecount = text.match(/[^.!?]+[.!?"]+[^".!?]|.+$/g) ? text.match(/[^.!?]+[.!?"]+[^".!?]|.+$/g)?.length : 0;
     // console.log('sc', text.match(/[^.!?]+[.!?"]+[^".!?]|.+$/g));
     setSentenceCount(sentencecount || 0);
 
@@ -311,17 +296,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
       textDecoration: textDecoration,
       fontStyle: fontStyle,
     }),
-    [
-      selectFontSize,
-      selectLineHeight,
-      selectFont,
-      textcolor,
-      backcolor,
-      selectAlign,
-      fontWeight,
-      textDecoration,
-      fontStyle,
-    ]
+    [selectFontSize, selectLineHeight, selectFont, textcolor, backcolor, selectAlign, fontWeight, textDecoration, fontStyle]
   );
 
   const [isOverflow, setIsOverflow] = useState(false);
@@ -444,13 +419,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
         </StyledFormatRow>
         <StyledFormatRow>
           <StyledToolbarItem>
-            <CustomNumberInput
-              value={selectFontSize}
-              unit="px"
-              min={24}
-              max={60}
-              onUpdateValue={(val) => setSelectFontSize(`${val}px`)}
-            />
+            <CustomNumberInput value={selectFontSize} unit="px" min={24} max={60} onUpdateValue={(val) => setSelectFontSize(`${val}px`)} />
           </StyledToolbarItem>
         </StyledFormatRow>
         <StyledFormatRow>
@@ -710,27 +679,31 @@ const ContentEditor: React.FC<ContentEditorProps> = ({
                   if (!data) {
                     // add
                     setLoading(true);
-                    onSave("add", saveObject).then((res) => {
-                      if (res.valid) {
-                        alert.success("저장 성공");
-                        onClose(true);
-                      } else {
-                        alert.error("저장 실패");
-                        console.error(res.msg);
-                      }
-                    });
+                    onSave("add", saveObject)
+                      .then((res) => {
+                        if (res.valid) {
+                          alert.success("저장 성공");
+                          onClose(true);
+                        } else {
+                          alert.error("저장 실패");
+                          console.error(res.msg);
+                        }
+                      })
+                      .finally(() => setLoading(false));
                   } else {
                     // fix
                     setLoading(true);
-                    onSave("fix", saveObject).then((res) => {
-                      if (res.valid) {
-                        alert.success("수정 성공");
-                        onClose(true);
-                      } else {
-                        alert.error("수정 실패");
-                        console.error(res.msg);
-                      }
-                    });
+                    onSave("fix", saveObject)
+                      .then((res) => {
+                        if (res.valid) {
+                          alert.success("수정 성공");
+                          onClose(true);
+                        } else {
+                          alert.error("수정 실패");
+                          console.error(res.msg);
+                        }
+                      })
+                      .finally(() => setLoading(false));
                   }
                 } catch (err) {
                   if (err instanceof Error) {
