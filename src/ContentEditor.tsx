@@ -629,7 +629,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLo
             divStyle={infoItemCustomSelectDivStyle}
             selectItem={textLevelActiveList[textLevelChangeActive]}
             selectList={textLevelActiveList}
-            onSelectItem={(sel) => setTextLevelChangeActive(sel === "변경레벨" ? 0 : 1)}
+            onSelectItem={(sel) => setTextLevelChangeActive(sel === "변경레벨" ? 1 : 0)}
             textAlign="center"
           />
         </StyledInfoItem>
