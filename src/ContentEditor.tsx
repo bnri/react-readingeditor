@@ -633,7 +633,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLo
             textAlign="center"
           />
         </StyledInfoItem>
-        <StyledResult style={{ height: viewOnly ? 60 : data ? 160 : 110 }}>
+        <StyledResult style={{ height: viewOnly ? 50 : data ? 140 : 100 }}>
           {!viewOnly && (
             <StyledBtn
               onClick={() => {
