@@ -36,11 +36,12 @@ interface ContentEditorProps extends CommonComponents {
 }
 
 const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLoading, data, onClose, onSave, onDelete, viewOnly }) => {
-  const { fontList, languageList, textTypeList, textLevelList, textActiveList, textContentLevelList } = useInfoList();
+  const { fontList, languageList, textTypeList, textLevelList, textActiveList, textContentLevelList, textLevelActiveList } = useInfoList();
   const [textTitle, setTextTitle] = useInput(data ? data.text.name : "");
   const [textLanguage, setTextLanguage] = useState(() => (data ? data.text.language : languageList[0]));
   const [textType, setTextType] = useState(() => (data ? data.text.domain : textTypeList[0]));
   const [textLevel, setTextLevel] = useState(() => (data ? data.text.level : textLevelList[0]));
+  const [textLevelChangeActive, setTextLevelChangeActive] = useState(data ? data.text.level_change_active : 0);
   const [textActive, setTextActive] = useState(() => (data ? data.textset.textActive : textActiveList[0]));
   const [textContentLevel, setTextContentLevel] = useState(() => (data ? data.textset.textContentLevel : textContentLevelList[0]));
 
@@ -622,6 +623,16 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLo
             textAlign="center"
           />
         </StyledInfoItem>
+        <StyledInfoItem>
+          <StyledInfoLabel>적용레벨</StyledInfoLabel>
+          <CustomSelect
+            divStyle={infoItemCustomSelectDivStyle}
+            selectItem={textLevelActiveList[textLevelChangeActive]}
+            selectList={textLevelActiveList}
+            onSelectItem={(sel) => setTextLevelChangeActive(sel === "변경레벨" ? 0 : 1)}
+            textAlign="center"
+          />
+        </StyledInfoItem>
         <StyledResult style={{ height: viewOnly ? 60 : data ? 160 : 110 }}>
           {!viewOnly && (
             <StyledBtn
@@ -666,6 +677,7 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLo
                       language: textLanguage,
                       level: textLevel,
                       level_changed: textLevel,
+                      level_change_active: textLevelChangeActive,
                       domain: textType,
                       wordCount: wordCount,
                       lineCount: lineCount,

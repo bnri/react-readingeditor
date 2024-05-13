@@ -33,6 +33,7 @@ interface saveContentDataType {
     language: string;
     level: string;
     level_changed: string;
+    level_change_active: number;
     domain: string;
     wordCount: number;
     lineCount: number;

@@ -22,11 +22,9 @@ const useInfoList = () => {
   const languageList = useMemo(() => ["한국어", "영어"], []);
   const textTypeList = useMemo(() => ["문학", "인문사회", "과학기술", "기타"], []);
   const textLevelList = useMemo(() => Array.from({ length: 16 }, (_, i) => `${i + 5}`), []);
+  const textLevelActiveList = useMemo(() => ["변경레벨", "설정레벨"], []);
   const textActiveList = useMemo(() => ["조직 공개", "비공개"], []);
-  const textContentLevelList = useMemo(
-    () => ["자동", "초심자", "초등 저학년", "초등 고학년", "중학생", "고등학생"],
-    []
-  );
+  const textContentLevelList = useMemo(() => ["자동", "초심자", "초등 저학년", "초등 고학년", "중학생", "고등학생"], []);
 
   return {
     fontList,
@@ -35,6 +33,7 @@ const useInfoList = () => {
     textLevelList,
     textActiveList,
     textContentLevelList,
+    textLevelActiveList,
   };
 };
 
