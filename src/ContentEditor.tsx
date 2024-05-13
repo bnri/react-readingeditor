@@ -41,7 +41,9 @@ const ContentEditor: React.FC<ContentEditorProps> = ({ maker, alert, Swal, setLo
   const [textLanguage, setTextLanguage] = useState(() => (data ? data.text.language : languageList[0]));
   const [textType, setTextType] = useState(() => (data ? data.text.domain : textTypeList[0]));
   const [textLevel, setTextLevel] = useState(() => (data ? data.text.level : textLevelList[0]));
-  const [textLevelChangeActive, setTextLevelChangeActive] = useState(data ? data.text?.level_change_active || 1 : 1);
+  const [textLevelChangeActive, setTextLevelChangeActive] = useState(
+    data && typeof data.text?.level_change_active === "number" ? data.text.level_change_active : 1
+  ); // 또는 으로 하면 안됨 0이면 1로 바뀜
   const [textActive, setTextActive] = useState(() => (data ? data.textset.textActive : textActiveList[0]));
   const [textContentLevel, setTextContentLevel] = useState(() => (data ? data.textset.textContentLevel : textContentLevelList[0]));
 
