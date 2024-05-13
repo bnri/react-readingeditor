@@ -19,7 +19,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "if exist dist rmdir /S /Q dist && tsc && copy src\\types.d.ts dist\\types.d.ts",
+    "compile": "tsc && copy src\\types.d.ts dist\\types.d.ts",
+    "build": "IF EXIST dist (rmdir /S /Q dist && npm run compile) ELSE (npm run compile)",
     "patch": "npm version patch && npm run build && npm publish && git push origin master"
   },
   "eslintConfig": {
